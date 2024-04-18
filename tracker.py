@@ -6,7 +6,7 @@ from tkinter import ttk
 class FinanceTrackerGUI:
     def __init__(self, root):
         self.root = root
-        self.root.title("Personal Finance Tracker")
+        self.root.title("Personal Finance Tracker - v3.0")
         self.create_widgets()
         self.transactions = self.load_transactions("transactions.json")
 
@@ -17,24 +17,35 @@ class FinanceTrackerGUI:
 
         # search bar, label and button
         self.label = ttk.Label(self.frame, text="Search:", font=('Arial', 18))
-        self.label.grid(row=0, column=0, padx=23, pady=12)
-        self.label.pack()
+        self.label.grid(row=0, column=0, padx=27, pady=12)
 
         self.search_text = tk.StringVar()
-        self.text_box = ttk.Entry(self.frame, width=53, textvariable=self.search_text, font='Arial, 24')
+        self.text_box = ttk.Entry(self.frame, width=45, textvariable=self.search_text, font='Arial, 24')
         self.text_box.grid(row=0, column=1, pady=4)
-        self.text_box.pack()
 
-        self.search_button = ttk.Button(self.frame, text='Search', width=10, command=self.search_transactions,
-                                        padding=10)
-        self.search_button.grid(row=0, column=2, pady=15)
-        self.search_button.pack()
+        self.search_button = ttk.Button(self.frame, text='Search', width=15, padding=5,
+                                        command=self.search_transactions)
+        self.search_button.grid(row=0, column=2, padx=13, pady=15, sticky='e')
 
         # scroll bar
-        self.scroll_bar = ttk.Scrollbar(self.root)
-        self.scroll_bar.pack(side='right')
+        self.scrollbar = ttk.Scrollbar(self.frame, orient='vertical')
+        self.scrollbar.grid(row=1, column=10, sticky='ns')
 
         # table
+        self.table = ttk.Treeview(self.frame, columns=('Index', 'Date', 'Transaction', 'Amount'), height=15,
+                                  show='headings', yscrollcommand=self.scrollbar.set)
+        self.table.heading('Index', text='Index')
+        self.table.heading('Transaction', text='Transaction')
+        self.table.heading('Date', text='Date')
+        self.table.heading('Amount', text='Amount')
+
+        self.table.column('Index', width=100)
+        self.table.column('Transaction', width=320)
+        self.table.column('Date', width=320)
+        self.table.column('Amount', width=320)
+
+        self.table.grid(row=1, column=0, columnspan=4, padx=11, pady=11)
+        self.scrollbar.config(command=self.table.yview)
 
     def load_transactions(self, filename):
         try:
@@ -63,7 +74,7 @@ def main():
     root = tk.Tk()
     app = FinanceTrackerGUI(root)
     app.display_transactions(app.transactions)
-    root.geometry('1285x725')
+    root.geometry('1110x448')
     root.resizable(False, False)
     root.mainloop()
 
