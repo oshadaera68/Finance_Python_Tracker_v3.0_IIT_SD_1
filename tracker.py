@@ -1,6 +1,6 @@
+import json
 import tkinter as tk
 from tkinter import ttk
-import json
 
 
 class FinanceTrackerGUI:
@@ -11,21 +11,38 @@ class FinanceTrackerGUI:
         self.transactions = self.load_transactions("transactions.json")
 
     def create_widgets(self):
-        # Frame for table and scrollbar
+        # frame
+        self.frame = ttk.Frame(self.root)
+        self.frame.pack(fill="both", expand=True)
 
-        # Treeview for displaying transactions
+        # search bar, label and button
+        self.label = ttk.Label(self.frame, text="Search:", font=('Arial', 18))
+        self.label.grid(row=0, column=0, padx=23, pady=12)
+        self.label.pack()
 
-        # Scrollbar for the Treeview
+        self.search_text = tk.StringVar()
+        self.text_box = ttk.Entry(self.frame, width=53, textvariable=self.search_text, font='Arial, 24')
+        self.text_box.grid(row=0, column=1, pady=4)
+        self.text_box.pack()
 
-        # Search bar and button
+        self.search_button = ttk.Button(self.frame, text='Search', width=10, command=self.search_transactions,
+                                        padding=10)
+        self.search_button.grid(row=0, column=2, pady=15)
+        self.search_button.pack()
 
-        pass
+        # scroll bar
+        self.scroll_bar = ttk.Scrollbar(self.root)
+        self.scroll_bar.pack(side='right')
+
+        #table
+
 
     def load_transactions(self, filename):
         try:
             with open(filename, 'r') as file:
-                json.load(file)
-        except FileNotFoundError:
+                transactions = json.load(file)
+                return transactions
+        except (FileNotFoundError, json.JSONDecodeError):
             return {}
 
     def display_transactions(self, transactions):
@@ -47,6 +64,8 @@ def main():
     root = tk.Tk()
     app = FinanceTrackerGUI(root)
     app.display_transactions(app.transactions)
+    root.geometry('1285x725')
+    root.resizable(False, False)
     root.mainloop()
 
 
