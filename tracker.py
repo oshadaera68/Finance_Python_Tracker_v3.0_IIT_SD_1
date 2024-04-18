@@ -34,8 +34,7 @@ class FinanceTrackerGUI:
         self.scroll_bar = ttk.Scrollbar(self.root)
         self.scroll_bar.pack(side='right')
 
-        #table
-
+        # table
 
     def load_transactions(self, filename):
         try:
