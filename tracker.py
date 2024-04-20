@@ -93,8 +93,10 @@ class FinanceTrackerGUI:
         print(search_query)
         # find the data in the transactions in search feature
         searched_transactions = [trans for trans in self.transactions if search_query in trans.trans_type.lower()]
+        # data showing the table in searched value
         self.display_transactions(searched_transactions)
 
+    # column sorting feature
     def sort_by_column(self, col, reverse):
         # Placeholder for sorting functionality
         pass
