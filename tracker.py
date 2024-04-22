@@ -30,10 +30,10 @@ class FinanceTrackerGUI:
         self.label.grid(row=0, column=0, padx=27, pady=12)  # place the absolute position in the widget
 
         self.search_text = tk.StringVar()  # create the variable in the string value in search feature
-        self.text_box = ttk.Entry(self.frame, width=45, textvariable=self.search_text, font='Arial, 24')
+        self.text_box = ttk.Entry(self.frame, width=45, textvariable=self.search_text, font='Arial, 20')
         self.text_box.grid(row=0, column=1, pady=4)
 
-        self.search_button = ttk.Button(self.frame, text='Search', width=15, padding=5,
+        self.search_button = ttk.Button(self.frame, text='Search', width=14, padding=5,
                                         command=self.search_transactions)  # clicking search event
         self.search_button.grid(row=0, column=2, padx=13, pady=15, sticky='e')
 
@@ -44,15 +44,24 @@ class FinanceTrackerGUI:
         # table
         self.table = ttk.Treeview(self.frame, columns=('Index', 'Date', 'Transaction', 'Amount'), height=15,
                                   show='headings', yscrollcommand=self.scrollbar.set)
+
+        # table headings
         self.table.heading('Index', text='Index')
         self.table.heading('Transaction', text='Transaction')
         self.table.heading('Date', text='Date')
         self.table.heading('Amount', text='Amount')
 
+        # table columns
         self.table.column('Index', width=100)
         self.table.column('Transaction', width=320)
         self.table.column('Date', width=320)
         self.table.column('Amount', width=320)
+
+        # Bind sorting function to column headers
+        self.table.heading('Index', command=lambda: self.sort_by_column('Index', False))
+        self.table.heading('Transaction', command=lambda: self.sort_by_column('Transaction', False))
+        self.table.heading('Date', command=lambda: self.sort_by_column('Date', False))
+        self.table.heading('Amount', command=lambda: self.sort_by_column('Amount', False))
 
         self.table.grid(row=1, column=0, columnspan=4, padx=11, pady=11)
         self.scrollbar.config(command=self.table.yview)
@@ -90,7 +99,6 @@ class FinanceTrackerGUI:
     # search feature
     def search_transactions(self):
         search_query = self.search_text.get().lower()
-        print(search_query)
         # find the data in the transactions in search feature
         searched_transactions = [trans for trans in self.transactions if search_query in trans.trans_type.lower()]
         # data showing the table in searched value
@@ -98,8 +106,23 @@ class FinanceTrackerGUI:
 
     # column sorting feature
     def sort_by_column(self, col, reverse):
-        # Placeholder for sorting functionality
-        pass
+        table_data = [(self.table.set(child, col), child) for child in self.table.get_children('')]
+
+        # Print table_data for debugging
+        print("Before sorting:", table_data)
+
+        # Sort the data based on the values in the specified column
+        table_data.sort(reverse=reverse)
+
+        # Print sorted table_data for debugging
+        print("After sorting:", table_data)
+
+        # Rearrange the rows in the table based on the sorted data
+        for index, (_, child) in enumerate(table_data):
+            self.table.move(child, '', index)
+
+        # Update the heading to toggle sorting order
+        self.table.heading(col, command=lambda: self.sort_by_column(col, not reverse))
 
 
 # main runnable function
