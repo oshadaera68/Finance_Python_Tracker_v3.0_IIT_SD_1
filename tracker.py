@@ -2,12 +2,14 @@ import json
 import tkinter as tk
 from tkinter import ttk
 
+
 # transaction class
 class Transactions:
     def __init__(self, trans_type, amount, date):
         self.trans_type = trans_type
         self.amount = amount
         self.date = date
+
 
 # initial class
 class FinanceTrackerGUI:
@@ -99,7 +101,8 @@ class FinanceTrackerGUI:
     def search_transactions(self):
         search_query = self.search_text.get().lower()
         # find the data in the transactions in search feature (using transaction type)
-        searched_transactions = [trans for trans in self.original_transactions if search_query in trans.trans_type.lower()]
+        searched_transactions = [trans for trans in self.original_transactions if
+                                 search_query in trans.trans_type.lower()]
         # data showing the table in searched value
         self.display_transactions(searched_transactions)
 
@@ -108,13 +111,13 @@ class FinanceTrackerGUI:
         # set the data in the table for sorting
         table_data = [(self.table.set(child, col), child) for child in self.table.get_children('')]
 
-        # Print table_data for debugging
+        # Print table_data for before sorting
         print("Before sorting:", table_data)
 
         # Sort the data based on the values in the specified column
         table_data.sort(reverse=reverse)
 
-        # Print sorted table_data for debugging
+        # Print table_data for after sorting
         print("After sorting:", table_data)
 
         # Rearrange the rows in the table based on the sorted data
@@ -124,6 +127,7 @@ class FinanceTrackerGUI:
         # Update the heading to toggle sorting order
         self.table.heading(col, command=lambda: self.sort_by_column(col, not reverse))
 
+
 # main runnable function
 def main():
     root = tk.Tk()
@@ -132,6 +136,7 @@ def main():
     root.geometry('1110x448')
     root.resizable(False, False)
     root.mainloop()
+
 
 # main runnable constructor
 if __name__ == "__main__":
