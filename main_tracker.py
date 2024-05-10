@@ -194,6 +194,7 @@ def update_transaction():
                     break
         else:
             print("You typed invalid index. Type the valid index number.")
+            main_menu()
     else:
         print("Not any Keys in this dictionary. Please add the key and try to update.")
         main_menu()
